@@ -1,15 +1,11 @@
-## 1. 개요 (Description)
+## 변경 내용
 
-* 
+- 
 
-## 2. 주요 변경 사항 (Changes)
+## 변경 배경
 
-* 
+- 
 
-## 3. 기술적 결정 (Technical Decisions)
-
-* 
-
-## 4. 관련 이슈
+## 관련 이슈
 
 closes #
