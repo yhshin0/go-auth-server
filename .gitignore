@@ -32,6 +32,8 @@ go.work.sum
 # .idea/
 .idea
 
+go-auth-server.iml
+
 # .vscode/
 
 # out/
