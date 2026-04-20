@@ -408,39 +408,42 @@ Same-origin + SameSite=Lax + OriginGuard 조합으로 대응한다.
 
 ## 환경변수
 
-| 변수 | 예시 | 설명 |
-|------|------|------|
-| `ENV` | `local` | `local` / `dev` / `prod` |
-| `HTTP_PORT` | `8080` | |
-| `HTTP_HOST` | `0.0.0.0` | |
-| `LOG_LEVEL` | `INFO` | `TRACE` / `DEBUG` / `INFO` / `WARN` / `ERROR` |
-| `ACCESS_TOKEN_TTL` | `10m` | 기본값: 10분 |
-| `REFRESH_TOKEN_TTL` | `168h` | 기본값: 7일 |
-| `JWT_SECRET` | `secret` | |
-| `JWT_ISSUER`| `auth-service` | |
-| `COOKIE_SECURE` | `true` | 로컬에서는 false로 고정됨 |
-| `ALLOWED_ORIGINS` | `http://example.com:8080,https://example.com:8080` | `,`로 구분 가능 |
-| `DB_HOST` | `localhost` | |
-| `DB_PORT` | `5432` | |
-| `DB_NAME` | `my_auth` | |
-| `DB_USER` | `my_auth_user` | |
-| `DB_PASSWORD` | `my_auth_password` | |
-| `DB_SSLMODE` | `disable` | |
-| `DB_MAX_IDLE_CONNS` | `1` | |
-| `DB_MAX_OPEN_CONNS` | `10` | |
-| `DB_MAX_LIFETIME` | `30m` | |
-| `REDIS_HOST` | `localhost` | |
-| `REDIS_PORT` | `6379` | |
-| `REDIS_PASSWORD` | `password` | |
-| `REDIS_DB` | `0` | |
-| `REDIS_POOL_SIZE` | `20` | |
-| `REDIS_KEY_PREFIX` | `auth:` | |
-| `HTTP_READ_TIMEOUT` | `5s` | 기본값: 5초 |
-| `HTTP_READ_HEADER_TIMEOUT` | `2s` | 기본값: 2초 |
-| `HTTP_WRITE_TIMEOUT` | `10s` | 기본값: 10초 |
-| `HTTP_IDLE_TIMEOUT` | `60s` | 기본값: 60초 |
-| `SESSION_LIMIT` | `5` | 기본값: 5 |
-| `REFRESH_LOCK_TTL` | `3s` | 기본값: 3초 |
+| 변수                         | 예시                                                 | 설명                                           |
+|----------------------------|----------------------------------------------------|----------------------------------------------|
+| `ENV`                      | `local`                                            | `local` / `dev` / `prod`                     |
+| `HTTP_PORT`                | `8080`                                             |                                              |
+| `HTTP_HOST`                | `0.0.0.0`                                          |                                              |
+| `HTTP_HANDLER_TIMEOUT`     | `10s`                                              | 서버에서 요청을 처리하는 시간. 기본값: 10초                   |
+| `HTTP_READ_TIMEOUT`        | `5s`                                               | 요청 전체를 읽는 시간. 기본값: 5초                        |
+| `HTTP_READ_HEADER_TIMEOUT` | `2s`                                               | 요청 헤더를 읽는 시간. 기본값: 2초                        |
+| `HTTP_WRITE_TIMEOUT`       | `10s`                                              | 응답을 클라이언트로 보내는 시간. 기본값: 10초                  |
+| `HTTP_IDLE_TIMEOUT`        | `60s`                                              | keep-alive 유휴 연결 유지 시간. 기본값: 60초             |
+| `LOG_LEVEL`                | `INFO`                                             | `TRACE` / `DEBUG` / `INFO` / `WARN` / `ERROR` |
+| `ACCESS_TOKEN_TTL`         | `10m`                                              | 기본값: 10분                                     |
+| `REFRESH_TOKEN_TTL`        | `168h`                                             | 기본값: 7일                                      |
+| `JWT_SECRET`               | `secret`                                           |                                              |
+| `JWT_ISSUER`               | `auth-service`                                     |                                              |
+| `COOKIE_SECURE`            | `true`                                             | cookie에 secure 넣을지 여부. 로컬에서는 false로 고정됨      |
+| `CORS_ALLOWED_ORIGINS`     | `http://example.com:8080,https://example.com:8080` | `,`로 구분 가능                                   |
+| `USER_SESSION_LIMIT`       | `5`                                                | 유저가 가질 수 있는 세션 개수. 기본값: 5                    |
+| `REFRESH_LOCK_TTL`         | `3s`                                               | 리프레시 토큰 만들 때의 lock 유지 시간. 기본값: 3초            |
+| `DB_DRIVER`                | `postgres`                                         |                                              |
+| `DB_HOST`                  | `localhost`                                        |                                              |
+| `DB_PORT`                  | `5432`                                             |                                              |
+| `DB_NAME`                  | `my_auth`                                          | 데이터베이스 이름                                    |
+| `DB_USER`                  | `my_auth_user`                                     |                                              |
+| `DB_PASSWORD`              | `my_auth_password`                                 |                                              |
+| `DB_SSLMODE`               | `disable`                                          |                                              |
+| `DB_MAX_IDLE_CONNS`        | `1`                                                |                                              |
+| `DB_MAX_OPEN_CONNS`        | `10`                                               |                                              |
+| `DB_MAX_LIFETIME`          | `30m`                                              |                                              |
+| `CACHE_DRIVER`              | `redis`                                            |                                              |
+| `CACHE_HOST`               | `localhost`                                        |                                              |
+| `CACHE_PORT`               | `6379`                                             |                                              |
+| `CACHE_PASSWORD`           | `password`                                         |                                              |
+| `CACHE_DB`                 | `0`                                                |                                              |
+| `CACHE_POOL_SIZE`          | `20`                                               |                                              |
+| `CACHE_KEY_PREFIX`         | `auth:`                                            |                                              |
 
 로컬 실행 시 `.env.example`을 복사해 `.env`로 사용한다.
 
