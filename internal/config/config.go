@@ -69,10 +69,7 @@ var (
 
 func GetInstance() *Config {
 	once.Do(func() {
-		if err := godotenv.Load(); err != nil {
-			log.Println("Failed to parse config:", err)
-			panic(err)
-		}
+		_ = godotenv.Load()
 
 		cfg = Config{}
 		if err := env.Parse(&cfg); err != nil {
