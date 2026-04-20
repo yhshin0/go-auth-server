@@ -12,12 +12,18 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"github.com/yhshin0/go-auth-server/internal/config"
+	"github.com/yhshin0/go-auth-server/internal/infrastructure/database"
 	"github.com/yhshin0/go-auth-server/internal/middleware"
 	"github.com/yhshin0/go-auth-server/internal/router"
 )
 
 func main() {
 	config.Setup()
+	db, err := database.NewDatabase(&config.GetInstance().DB)
+	if err != nil {
+		log.Fatalf("failed to initialize database: %s\n", err.Error())
+	}
+	defer db.CloseWithLog()
 
 	// The HTTP Server
 	c := config.GetInstance()
