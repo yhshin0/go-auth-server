@@ -42,7 +42,7 @@ type ServerConfig struct {
 type DBConfig struct {
 	Driver       string        `env:"DB_DRIVER" envDefault:"postgres"`
 	Host         string        `env:"DB_HOST" envDefault:"localhost"`
-	Port         string        `env:"DB_PORT" envDefault:"5432"`
+	Port         int           `env:"DB_PORT" envDefault:"5432"`
 	Name         string        `env:"DB_NAME" envDefault:"my_auth"`
 	User         string        `env:"DB_USER" envDefault:"my_user"`
 	Password     string        `env:"DB_PASSWORD" envDefault:""`
