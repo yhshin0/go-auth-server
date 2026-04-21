@@ -1,0 +1,8 @@
+-- server version: v0.0.1
+
+BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+DROP TRIGGER IF EXISTS tr_users_update_mts ON users;
+DROP TABLE IF EXISTS users;
+
+COMMIT;
