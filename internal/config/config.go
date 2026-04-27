@@ -55,7 +55,7 @@ type DBConfig struct {
 type CacheConfig struct {
 	Driver    string `env:"CACHE_DRIVER" envDefault:"redis"`
 	Host      string `env:"CACHE_HOST" envDefault:"localhost"`
-	Port      string `env:"CACHE_PORT" envDefault:"6379"`
+	Port      int    `env:"CACHE_PORT" envDefault:"6379"`
 	DB        int    `env:"CACHE_DB" envDefault:"0"`
 	Password  string `env:"CACHE_PASSWORD" envDefault:""`
 	PoolSize  int    `env:"CACHE_POOL_SIZE" envDefault:"20"`
