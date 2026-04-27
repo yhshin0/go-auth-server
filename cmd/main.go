@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/yhshin0/go-auth-server/internal/infrastructure/cache"
 
 	"github.com/yhshin0/go-auth-server/internal/config"
 	"github.com/yhshin0/go-auth-server/internal/infrastructure/database"
@@ -19,11 +20,17 @@ import (
 
 func main() {
 	config.Setup()
+
+	// database
 	db, err := database.NewDatabase(&config.GetInstance().DB)
 	if err != nil {
 		log.Fatalf("failed to initialize database: %s\n", err.Error())
 	}
 	defer db.CloseWithLog()
+
+	// cache
+	cacheCli := cache.NewCache(&config.GetInstance().Cache)
+	defer cacheCli.CloseWithLog()
 
 	// The HTTP Server
 	c := config.GetInstance()
