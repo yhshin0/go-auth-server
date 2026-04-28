@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -44,6 +45,7 @@ func main() {
 		ReadHeaderTimeout: c.Server.HttpReadHeaderTimeout,
 		WriteTimeout:      c.Server.HttpWriteTimeout,
 		IdleTimeout:       c.Server.HttpIdleTimeout,
+		ErrorLog:          slog.NewLogLogger(slog.Default().Handler(), slog.LevelError),
 	}
 
 	// Create context that listens for the interrupt signal
