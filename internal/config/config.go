@@ -68,6 +68,11 @@ var (
 )
 
 func GetInstance() *Config {
+	Setup()
+	return &cfg
+}
+
+func Setup() {
 	once.Do(func() {
 		_ = godotenv.Load()
 
@@ -78,9 +83,4 @@ func GetInstance() *Config {
 			panic(err)
 		}
 	})
-	return &cfg
-}
-
-func Setup() {
-	_ = GetInstance()
 }
