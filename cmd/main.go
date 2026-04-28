@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -19,31 +20,31 @@ import (
 )
 
 func main() {
-	config.Setup()
-	logger.Setup(config.GetInstance().Server.Env)
+	cfg := config.GetInstance()
+	logger.Setup(cfg.Server.Env) // slog default 설정
 
 	// database
-	db, err := database.NewDatabase(&config.GetInstance().DB)
+	db, err := database.NewDatabase(&cfg.DB)
 	if err != nil {
-		logger.Error("failed to initialize database", "error", err)
+		slog.Error("failed to initialize database", "error", err)
 		panic(err)
 	}
 	defer db.CloseWithLog()
 
 	// cache
-	cacheCli := cache.NewCache(&config.GetInstance().Cache)
+	cacheCli := cache.NewCache(&cfg.Cache)
 	defer cacheCli.CloseWithLog()
 
 	// The HTTP Server
-	c := config.GetInstance()
-	addr := c.Server.Host + ":" + c.Server.Port
+	addr := cfg.Server.Host + ":" + cfg.Server.Port
 	server := &http.Server{
 		Addr:              addr,
 		Handler:           service(),
-		ReadTimeout:       c.Server.HttpReadTimeout,
-		ReadHeaderTimeout: c.Server.HttpReadHeaderTimeout,
-		WriteTimeout:      c.Server.HttpWriteTimeout,
-		IdleTimeout:       c.Server.HttpIdleTimeout,
+		ReadTimeout:       cfg.Server.HttpReadTimeout,
+		ReadHeaderTimeout: cfg.Server.HttpReadHeaderTimeout,
+		WriteTimeout:      cfg.Server.HttpWriteTimeout,
+		IdleTimeout:       cfg.Server.HttpIdleTimeout,
+		ErrorLog:          slog.NewLogLogger(slog.Default().Handler(), slog.LevelError),
 	}
 
 	// Create context that listens for the interrupt signal
@@ -53,7 +54,7 @@ func main() {
 	// Run server in the background
 	go func() {
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			logger.Error("failed to start server", "error", err)
+			slog.Error("failed to start server", "error", err)
 			panic(err)
 		}
 	}()
@@ -67,7 +68,7 @@ func main() {
 
 	// Trigger graceful shutdown
 	if err := server.Shutdown(shutdownCtx); err != nil {
-		logger.Error("failed to shutdown server", "error", err)
+		slog.Error("failed to shutdown server", "error", err)
 		panic(err)
 	}
 }

@@ -10,12 +10,10 @@ import (
 	"github.com/yhshin0/go-auth-server/internal/defs/enum"
 )
 
-var (
-	logger *slog.Logger
-	once   sync.Once
-)
+var once sync.Once
 
 func Setup(env string) {
+	var logger *slog.Logger
 	once.Do(func() {
 		switch strings.ToLower(env) {
 		case enum.ServerEnvLocal.String():
@@ -27,20 +25,6 @@ func Setup(env string) {
 			panic(err)
 		}
 	})
-}
 
-func Debug(format string, args ...any) {
-	logger.Debug(format, args...)
-}
-
-func Info(format string, args ...any) {
-	logger.Info(format, args...)
-}
-
-func Warn(format string, args ...any) {
-	logger.Warn(format, args...)
-}
-
-func Error(format string, args ...any) {
-	logger.Error(format, args...)
+	slog.SetDefault(logger)
 }
