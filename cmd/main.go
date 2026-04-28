@@ -21,12 +21,12 @@ import (
 
 func main() {
 	config.Setup()
-	logger.Setup(config.GetInstance().Server.Env)
+	logger.Setup(config.GetInstance().Server.Env) // slog default 설정
 
 	// database
 	db, err := database.NewDatabase(&config.GetInstance().DB)
 	if err != nil {
-		logger.Error("failed to initialize database", "error", err)
+		slog.Error("failed to initialize database", "error", err)
 		panic(err)
 	}
 	defer db.CloseWithLog()
@@ -55,7 +55,7 @@ func main() {
 	// Run server in the background
 	go func() {
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			logger.Error("failed to start server", "error", err)
+			slog.Error("failed to start server", "error", err)
 			panic(err)
 		}
 	}()
@@ -69,7 +69,7 @@ func main() {
 
 	// Trigger graceful shutdown
 	if err := server.Shutdown(shutdownCtx); err != nil {
-		logger.Error("failed to shutdown server", "error", err)
+		slog.Error("failed to shutdown server", "error", err)
 		panic(err)
 	}
 }

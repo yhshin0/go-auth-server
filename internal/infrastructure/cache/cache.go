@@ -3,6 +3,7 @@ package cache
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 	"sync"
 	"time"
@@ -10,7 +11,6 @@ import (
 	"github.com/yhshin0/go-auth-server/internal/config"
 	"github.com/yhshin0/go-auth-server/internal/defs"
 	"github.com/yhshin0/go-auth-server/internal/infrastructure/cache/redis"
-	"github.com/yhshin0/go-auth-server/internal/infrastructure/logger"
 )
 
 type Client interface {
@@ -29,7 +29,7 @@ func NewCache(cfg *config.CacheConfig) Client {
 	once.Do(func() {
 		cli, err = setup(cfg)
 		if err != nil {
-			logger.Error("failed to setup cache", "error", err)
+			slog.Error("failed to setup cache", "error", err)
 			panic(err)
 		}
 	})

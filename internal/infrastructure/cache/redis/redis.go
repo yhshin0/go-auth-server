@@ -3,13 +3,13 @@ package redis
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 
 	"github.com/yhshin0/go-auth-server/internal/config"
-	"github.com/yhshin0/go-auth-server/internal/infrastructure/logger"
 )
 
 type Client struct {
@@ -34,7 +34,7 @@ func NewRedis(cfg *config.CacheConfig) (*Client, error) {
 		cancel()
 
 		if err == nil {
-			logger.Info("success to connect to redis")
+			slog.Info("success to connect to redis")
 			return &Client{
 				keyPrefix: cfg.KeyPrefix,
 				cli:       rdb,
@@ -42,7 +42,7 @@ func NewRedis(cfg *config.CacheConfig) (*Client, error) {
 		}
 
 		wait := time.Duration(1<<i) * time.Second // 1s, 2s, 4s, ...
-		logger.Warn("failed to ping to redis", "tries", i+1, "wait", wait, "error", err)
+		slog.Warn("failed to ping to redis", "tries", i+1, "wait", wait, "error", err)
 		time.Sleep(wait)
 	}
 
@@ -51,7 +51,7 @@ func NewRedis(cfg *config.CacheConfig) (*Client, error) {
 
 func (rc *Client) CloseWithLog() {
 	if err := rc.cli.Close(); err != nil {
-		logger.Warn("failed to close redis client", "error", err)
+		slog.Warn("failed to close redis client", "error", err)
 	}
 }
 
