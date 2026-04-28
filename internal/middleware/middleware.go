@@ -9,14 +9,16 @@ import (
 )
 
 func Register(r *chi.Mux) {
-	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Timeout(config.GetInstance().Server.HttpHandlerTimeout))
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   config.GetInstance().CORS.AllowedOrigins,
-		AllowedMethods:   config.GetInstance().CORS.AllowedMethods,
-		AllowCredentials: config.GetInstance().CORS.AllowedCredentials,
+	cfg := config.GetInstance()
+
+	r.Use(middleware.RequestID)      // 모든 로그에 ID 부여 (가장 먼저)
+	r.Use(middleware.RealIP)         // IP 교체 (Logger 전에)
+	r.Use(middleware.Recoverer)      // panic 방어 (가능한 바깥쪽)
+	r.Use(middleware.Logger)         // 요청 로깅 (위 정보들 활용)
+	r.Use(cors.Handler(cors.Options{ // CORS preflight 빠르게 응답
+		AllowedOrigins:   cfg.CORS.AllowedOrigins,
+		AllowedMethods:   cfg.CORS.AllowedMethods,
+		AllowCredentials: cfg.CORS.AllowedCredentials,
 	}))
+	r.Use(middleware.Timeout(cfg.Server.HttpHandlerTimeout)) // 핸들러 타임아웃
 }
