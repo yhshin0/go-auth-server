@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
@@ -11,6 +10,7 @@ import (
 	"github.com/yhshin0/go-auth-server/internal/config"
 	"github.com/yhshin0/go-auth-server/internal/defs"
 	"github.com/yhshin0/go-auth-server/internal/infrastructure/database/postgres"
+	"github.com/yhshin0/go-auth-server/internal/infrastructure/logger"
 )
 
 type DB struct {
@@ -33,6 +33,6 @@ func NewDatabase(cfg *config.DBConfig) (*DB, error) {
 
 func (db *DB) CloseWithLog() {
 	if err := db.DB.Close(); err != nil {
-		log.Printf("failed to close database: %s\n", err.Error())
+		logger.Warn("failed to close database", "error", err)
 	}
 }

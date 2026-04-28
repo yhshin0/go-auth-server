@@ -3,28 +3,30 @@ package main
 import (
 	"context"
 	"errors"
-	"log"
 	"net/http"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/yhshin0/go-auth-server/internal/infrastructure/cache"
 
 	"github.com/yhshin0/go-auth-server/internal/config"
+	"github.com/yhshin0/go-auth-server/internal/infrastructure/cache"
 	"github.com/yhshin0/go-auth-server/internal/infrastructure/database"
+	"github.com/yhshin0/go-auth-server/internal/infrastructure/logger"
 	"github.com/yhshin0/go-auth-server/internal/middleware"
 	"github.com/yhshin0/go-auth-server/internal/router"
 )
 
 func main() {
 	config.Setup()
+	logger.Setup(config.GetInstance().Server.Env)
 
 	// database
 	db, err := database.NewDatabase(&config.GetInstance().DB)
 	if err != nil {
-		log.Fatalf("failed to initialize database: %s\n", err.Error())
+		logger.Error("failed to initialize database", "error", err)
+		panic(err)
 	}
 	defer db.CloseWithLog()
 
@@ -51,7 +53,8 @@ func main() {
 	// Run server in the background
 	go func() {
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatal(err)
+			logger.Error("failed to start server", "error", err)
+			panic(err)
 		}
 	}()
 
@@ -64,7 +67,8 @@ func main() {
 
 	// Trigger graceful shutdown
 	if err := server.Shutdown(shutdownCtx); err != nil {
-		log.Fatal(err)
+		logger.Error("failed to shutdown server", "error", err)
+		panic(err)
 	}
 }
 
