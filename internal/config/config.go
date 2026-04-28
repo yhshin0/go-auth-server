@@ -73,7 +73,8 @@ func GetInstance() *Config {
 
 		cfg = Config{}
 		if err := env.Parse(&cfg); err != nil {
-			log.Println("Failed to parse config:", err)
+			// log 설정 전이라서 log 라이브러리 사용
+			log.Println("failed to parse config. error:", err.Error())
 			panic(err)
 		}
 	})

@@ -3,13 +3,13 @@ package postgres
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/jmoiron/sqlx"
 
 	"github.com/yhshin0/go-auth-server/internal/config"
 	"github.com/yhshin0/go-auth-server/internal/defs"
+	"github.com/yhshin0/go-auth-server/internal/infrastructure/logger"
 )
 
 func NewDatabase(cfg *config.DBConfig) (*sqlx.DB, error) {
@@ -20,7 +20,7 @@ func NewDatabase(cfg *config.DBConfig) (*sqlx.DB, error) {
 		return nil, err
 	}
 
-	log.Println("Successfully connected to database")
+	logger.Info("success to connect to postgres")
 
 	// 커넥션 풀 설정 (성능 최적화)
 	db.SetMaxOpenConns(cfg.MaxOpenConns)
@@ -38,7 +38,7 @@ func connectDB(uri string) (*sqlx.DB, error) {
 	for i := 0; i < maxTries; i++ {
 		db, err = sqlx.Open(defs.PostgresDriver, uri)
 		if err != nil {
-			log.Printf("failed to open database(%s). error: %s\n", defs.PostgresDriver, err.Error())
+			logger.Warn("failed to open postgres", "error", err)
 			return nil, err
 		}
 
@@ -53,7 +53,7 @@ func connectDB(uri string) (*sqlx.DB, error) {
 		db.Close()
 
 		wait := time.Duration(1<<i) * time.Second // 1s, 2s, 4s, ...
-		log.Printf("failed to ping (try %d/%d), retrying in %s, error: %s\n", i+1, maxTries, wait, err.Error())
+		logger.Warn("failed to ping postgres", "try", i+1, "wait", wait, "error", err)
 		time.Sleep(wait)
 	}
 
