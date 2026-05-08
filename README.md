@@ -6,12 +6,12 @@ JWT access token + rotating refresh token 기반 인증 서버.
 
 ## 기술 스택
 
-| 분류 | 선택 |
-|------|------|
-| Language | Go 1.24+ |
-| Framework | chi |
+| 분류 | 선택             |
+|------|----------------|
+| Language | Go 1.25+       |
+| Framework | chi            |
 | DB | PostgreSQL 15+ |
-| Cache | Redis 7+ |
+| Cache | Redis 7+       |
 
 ---
 
@@ -440,10 +440,15 @@ Same-origin + SameSite=Lax + OriginGuard 조합으로 대응한다.
 | `CACHE_DRIVER`              | `redis`                                            |                                              |
 | `CACHE_HOST`               | `localhost`                                        |                                              |
 | `CACHE_PORT`               | `6379`                                             |                                              |
-| `CACHE_PASSWORD`           | `password`                                         |                                              |
 | `CACHE_DB`                 | `0`                                                |                                              |
+| `CACHE_PASSWORD`           | `password`                                         |                                              |
 | `CACHE_POOL_SIZE`          | `20`                                               |                                              |
 | `CACHE_KEY_PREFIX`         | `auth:`                                            |                                              |
+| `ARGON2ID_VERSION`           | `19`                                               |                                              |
+| `ARGON2ID_MEMORY_KIB`           | `16384`                                            |                                              |
+| `ARGON2ID_TIME_COST`           | `2`                                                |                                              |
+| `ARGON2ID_THREADS`           | `1`                                                |                                              |
+| `ARGON2ID_KEY_LENGTH`           | `32`                                               |                                              |
 
 로컬 실행 시 `.env.example`을 복사해 `.env`로 사용한다.
 
@@ -457,7 +462,7 @@ cp .env.example .env
 
 **요구사항**
 
-- Go 1.24+
+- Go 1.25+
 - PostgreSQL 15+
 - Redis 7+
 

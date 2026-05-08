@@ -16,8 +16,9 @@ type Config struct {
 		AllowedMethods     []string `env:"CORS_ALLOWED_METHODS" envSeparator:"," envDefault:"GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS"`
 		AllowedCredentials bool     `env:"CORS_ALLOWED_CREDENTIALS" envDefault:"false"`
 	}
-	DB    DBConfig
-	Cache CacheConfig
+	DB       DBConfig
+	Cache    CacheConfig
+	Argon2ID Argon2IDConfig
 }
 
 type ServerConfig struct {
@@ -60,6 +61,15 @@ type CacheConfig struct {
 	Password  string `env:"CACHE_PASSWORD" envDefault:""`
 	PoolSize  int    `env:"CACHE_POOL_SIZE" envDefault:"20"`
 	KeyPrefix string `env:"CACHE_KEY_PREFIX" envDefault:"auth"`
+}
+
+type Argon2IDConfig struct {
+	Version             uint8  `env:"ARGON2ID_VERSION" envDefault:"19"`
+	MemoryKiB           uint32 `env:"ARGON2ID_MEMORY_KIB" envDefault:"16384"`
+	TimeCost            uint32 `env:"ARGON2ID_TIME_COST" envDefault:"2"`
+	Threads             uint8  `env:"ARGON2ID_THREADS" envDefault:"1"`
+	KeyLen              uint32 `env:"ARGON2ID_KEY_LENGTH" envDefault:"32"`
+	MaxConcurrentHashes uint8  `env:"ARGON2ID_MAX_CONCURRENT_HASHES" envDefault:"4"`
 }
 
 var (

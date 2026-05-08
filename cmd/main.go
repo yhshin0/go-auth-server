@@ -17,11 +17,16 @@ import (
 	"github.com/yhshin0/go-auth-server/internal/infrastructure/logger"
 	"github.com/yhshin0/go-auth-server/internal/middleware"
 	"github.com/yhshin0/go-auth-server/internal/router"
+	"github.com/yhshin0/go-auth-server/internal/util"
 )
 
 func main() {
 	cfg := config.GetInstance()
 	logger.Setup(cfg.Server.Env) // slog default 설정
+	if err := util.Setup(); err != nil {
+		slog.Error("failed to setup util", "error", err)
+		panic(err)
+	}
 
 	// database
 	db, err := database.NewDatabase(&cfg.DB)
